@@ -88,4 +88,35 @@
 - Java is always **pass by value**:
   - Primitive values: actual value is copied.  
   - Object references: reference value (address) is copied.  
-- Because of this, swapping values using wrapper classes does not work.  
+- Because of this, swapping values using wrapper classes does not work.
+
+- class Box { int value; }
+
+public class Test {
+    static void change(Box b) {
+        b.value = 100;     // (1) modifies the original
+        b = new Box();     // (2) reassign local reference
+        b.value = 200;     // (3) modifies the new object
+    }
+
+    public static void main(String[] args) {
+        Box box1 = new Box();
+        box1.value = 10;
+        change(box1);
+        System.out.println(box1.value);
+    }
+}
+
+box1.value = 10 → box1 → {value=10}.
+
+change(box1) → local b is created, pointing to the same {value=10}.
+
+b.value = 100 → now {value=100} (affects both box1 and b).
+
+b = new Box() → local b now points to a new object {value=0}.
+
+b.value = 200 → changes the new object to {value=200}.
+
+But box1 is still pointing to the old object {value=100}.
+
+Method ends → b disappears, leaving only box1 → {value=100}.
