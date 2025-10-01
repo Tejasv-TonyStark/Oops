@@ -1,283 +1,119 @@
-# Object-Oriented Programming (OOP) in Java
+# Object-Oriented Programming (OOP) Notes
 
-Object-Oriented Programming (OOP) is a programming paradigm based on the concept of objects. 
-The four key principles of OOP are:
+Some of the important topics for interviews are principles of Object-Oriented Programming. These include **Inheritance, Polymorphism, Encapsulation, Abstraction**.
 
-- **Encapsulation**
-- **Abstraction**
-- **Inheritance**
-- **Polymorphism**
+## Principles of OOP
 
----
+OOP allows us to reuse features of one class in another class through **Inheritance**.
 
-## 1. Encapsulation
-Encapsulation is the process of **binding data (variables) and methods into a single unit (class)** 
-and restricting direct access to some of the object’s components.
+Suppose we have 2 classes `A` and `B`. If `B` needs some important features of `A`, we use inheritance.
 
-### Key Points
-- Variables should be declared **private**.
-- Access provided through **getters** and **setters**.
-- Improves **security** and **modularity**.
+* Variables and methods of the **Parent class** can be accessed by the **Child class**.
+* Child class **cannot access private members** of the parent class.
+* In the main function, we **cannot declare a child reference with a parent object**, as the parent is unaware of the child.
 
-### Example
-```java
-class Student {
-    private String name;   // private variable
-    private int age;
+**Example: Single Inheritance**
 
-    Student(String name, int age) {
-        this.name = name;
-        this.age = age;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setAge(int age) {
-        if (age > 0) {
-            this.age = age;
-        }
-    }
-}
-```
-
----
-
-## 2. Abstraction
-Abstraction means **hiding implementation details** and only showing essential features.
-
-### Key Points
-- Achieved using **abstract classes** and **interfaces**.
-- Focuses on **what an object does** rather than **how it does it**.
-
-### Example
-```java
-abstract class Animal {
-    abstract void makeSound();  // Abstract method
-}
-
-class Dog extends Animal {
-    void makeSound() {
-        System.out.println("Woof Woof");
-    }
-}
-```
-
----
-
-## 3. Inheritance
-Inheritance allows a class (**child/derived**) to acquire properties and behaviors from another class (**parent/base**).
-
-### Key Points
-- Promotes **code reusability**.
-- Child can access all **non-private** members of the parent.
-- A parent reference can hold a child object (polymorphic behavior).
-
-### Example
 ```java
 class A {
     int x = 10;
+    private int y = 20;
 
-    void display() {
-        System.out.println("Value of x: " + x);
+    void showX() {
+        System.out.println("x = " + x);
     }
 }
 
 class B extends A {
-    int y = 20;
-
     void show() {
-        System.out.println("Value of y: " + y);
+        showX(); // ✅ Can access
+        // System.out.println(y); // ❌ Cannot access private
     }
 }
 
 public class Main {
     public static void main(String[] args) {
         B obj = new B();
-        obj.display(); // Parent method
-        obj.show();    // Child method
+        obj.show();
     }
 }
 ```
 
----
+## Example: Box
 
-### Private Members in Inheritance
 ```java
-class Parent {
-    private int secret = 100;
+class Box {
+    int length, width, height;
+
+    Box(int l, int w, int h) {
+        length = l;
+        width = w;
+        height = h;
+    }
+
+    int volume() {
+        return length * width * height;
+    }
 }
 
-class Child extends Parent {
-    void showSecret() {
-        // System.out.println(secret); ❌ Not allowed
+class ColoredBox extends Box {
+    String color;
+
+    ColoredBox(int l, int w, int h, String c) {
+        super(l, w, h); // Call parent constructor
+        color = c;
+    }
+
+    void showColor() {
+        System.out.println("Color: " + color);
+    }
+}
+
+public class MainBox {
+    public static void main(String[] args) {
+        ColoredBox cb = new ColoredBox(2, 3, 4, "Red");
+        System.out.println("Volume: " + cb.volume());
+        cb.showColor();
     }
 }
 ```
 
----
+## Explanation
 
-### Parent Reference to Child Object
-```java
-A obj = new B();
-obj.display(); // Works (from parent)
-// obj.show(); // ❌ Not allowed
-```
+* Use **`super` keyword** to access parent class variables in the child constructor.
+* `Object` class is the parent class to all classes in Java.
+* Private members of the parent class cannot be accessed by the child class.
+* In single inheritance, a child class inherits properties from only one parent class.
+* In multiple inheritance, a child class can obtain properties from multiple parent classes. Java allows multiple inheritance via interfaces.
 
----
-
-### `super` Keyword
-`super` is used to call the parent constructor or parent methods.
+**Example: Multiple Inheritance via Interfaces**
 
 ```java
-class Parent {
-    int num;
-
-    Parent(int num) {
-        this.num = num;
-    }
+interface A {
+    void featureA();
 }
 
-class Child extends Parent {
-    Child(int num) {
-        super(num);  // Calls parent constructor
-    }
+interface B {
+    void featureB();
 }
-```
 
----
+class C implements A, B {
+    public void featureA() {
+        System.out.println("Feature A");
+    }
 
-### Object Class
-Every class in Java inherits from the `Object` class by default.
-
-Common methods:
-- `toString()`
-- `equals()`
-- `hashCode()`
-
-```java
-class Sample {
-    int value = 5;
+    public void featureB() {
+        System.out.println("Feature B");
+    }
 }
 
 public class Main {
     public static void main(String[] args) {
-        Sample s = new Sample();
-        System.out.println(s.toString()); // Inherited from Object
+        C obj = new C();
+        obj.featureA();
+        obj.featureB();
     }
 }
 ```
 
----
-
-## 4. Types of Inheritance
-
-### Single Inheritance
-One child class inherits from one parent class.
-
-```java
-class Parent {
-    void greet() {
-        System.out.println("Hello from Parent");
-    }
-}
-
-class Child extends Parent {
-    void message() {
-        System.out.println("Hello from Child");
-    }
-}
-```
-
----
-
-### Multiple Inheritance
-Java does **not support multiple inheritance with classes** to avoid ambiguity, 
-but it can be achieved using **interfaces**.
-
-```java
-interface A {
-    void show();
-}
-
-interface B {
-    void display();
-}
-
-class C implements A, B {
-    public void show() {
-        System.out.println("From A");
-    }
-
-    public void display() {
-        System.out.println("From B");
-    }
-}
-```
-
----
-
-## 5. Polymorphism
-Polymorphism allows the same method to perform different actions.
-
-### Key Points
-- **Compile-time (Method Overloading)**
-- **Runtime (Method Overriding)**
-
-### Example
-```java
-class Calculator {
-    // Method Overloading
-    int add(int a, int b) {
-        return a + b;
-    }
-
-    double add(double a, double b) {
-        return a + b;
-    }
-}
-
-class Animal {
-    void sound() {
-        System.out.println("Animal sound");
-    }
-}
-
-class Dog extends Animal {
-    void sound() {
-        System.out.println("Bark");
-    }
-}
-```
-
----
-
-## 6. Additional Important Points for Interviews
-
-- **Constructor Chaining:** Child constructor automatically calls the parent constructor (explicitly using `super()` or implicitly).  
-- **Final Keyword:** 
-  - `final class` → cannot be inherited.  
-  - `final method` → cannot be overridden.  
-  - `final variable` → value cannot be changed.  
-- **this vs super:**  
-  - `this` → refers to the current class instance.  
-  - `super` → refers to the parent class.  
-- **Overloading vs Overriding:**  
-  - Overloading → same method name, different parameters.  
-  - Overriding → same method name & parameters, but redefined in child class.  
-- **Interfaces vs Abstract Classes:**  
-  - Interfaces → multiple inheritance, only method signatures (until Java 8 default methods).  
-  - Abstract Classes → partial abstraction with both abstract and concrete methods.  
-
----
-
-# 📌 Conclusion
-- OOP revolves around Encapsulation, Abstraction, Inheritance, and Polymorphism.  
-- Inheritance improves reusability but private members are not inherited.  
-- `super` is used to call parent constructors and methods.  
-- Java supports **single inheritance with classes** and **multiple inheritance through interfaces**.  
-- `Object` class is the root of all Java classes.  
-- Polymorphism is one of the most asked concepts in interviews (overloading vs overriding).  
-
----
+*This summary covers the key points from the notes for interview preparation, focusing on inheritance, access modifiers, and the use of `super` in Java.*
