@@ -116,4 +116,21 @@ public class Main {
 }
 ```
 
+Own notes :
+Some of the important topics for interviews are the principles of Object-Oriented Programming. These include Inheritance, Polymorphism, Encapsulation, and Abstraction.
+
+Inheritance: Suppose we have two classes, A and B. If B needs some important features of A, inheritance is used. The variables and methods of the parent class can be accessed by the child class. However, the child class cannot access variables or methods of the parent class if they are declared as private.
+
+Even in the main function, we cannot declare a child reference with a parent object, because the parent is unaware of the child.
+
+If we are creating a constructor in the child class and want to access the variables of the parent class, we need to call the super keyword, which initializes the parent class variables.
+
+The Object class is the parent class of all classes in Java.
+
+In single inheritance, we inherit properties from only one parent class.
+
+In multiple inheritance, we obtain properties from multiple parent classes into a single child class.
+
+This is for today; it will be continued.
+
 *This summary covers the key points from the notes for interview preparation, focusing on inheritance, access modifiers, and the use of `super` in Java.*
